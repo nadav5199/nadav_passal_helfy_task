@@ -42,6 +42,12 @@
 .carousel-slide {
     flex: 0 0 calc((100% - 4rem) / 3);
     min-width: 0;
+    cursor: pointer;
+}
+
+.single-task,
+.task-grid > div {
+    cursor: pointer;
 }
 
 
@@ -94,17 +100,6 @@
     justify-content: center;
     width: 100%;
 }
-
-@media (max-width: 1024px) {
-    .carousel-slide {
-        flex: 0 0 calc((100% - 2rem) / 2);
-    }
-}
-
-@media (max-width: 768px) {
-    .carousel-slide {
-        flex: 0 0 100%;
-    }
 
     .carousel-wrapper {
         gap: 0.5rem;

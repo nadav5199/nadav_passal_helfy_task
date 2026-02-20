@@ -1,4 +1,5 @@
 import TaskItem from './TaskItem'
+import Modal from './Modal'
 import '../styles/task-list.css'
 import { getAllTasks } from '../services/tasks.service';
 import { useEffect, useState, useMemo } from 'react';
@@ -9,6 +10,8 @@ export default function TaskList() {
     const [currentIndex, setCurrentIndex] = useState(3) 
     const [isTransitioning, setIsTransitioning] = useState(false)
     const [enableTransition, setEnableTransition] = useState(true)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [selectedTask, setSelectedTask] = useState(null)
 
     useEffect(() => {
         getAllTasks(setTasks);
@@ -69,6 +72,17 @@ export default function TaskList() {
         setIsTransitioning(false);
     };
 
+    const handleTaskClick = (task) => {
+        setSelectedTask(task);
+        setIsModalOpen(true);
+    };
+
+    const handleTaskUpdate = (updatedData) => {
+        setTasks(prev => prev.map(t => 
+            t.id === selectedTask.id ? { ...t, ...updatedData } : t
+        ));
+    };
+
     if (tasks.length === 0) {
         return (
             <div className="task-list-container">
@@ -82,9 +96,16 @@ export default function TaskList() {
         return (
             <div className="task-list-container">
                 <h1>Task List</h1>
-                <div className="single-task">
+                <div className="single-task" onClick={() => handleTaskClick(tasks[0])}>
                     <TaskItem task={tasks[0]} />
                 </div>
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    title="Edit Task"
+                    task={selectedTask}
+                    onSubmit={handleTaskUpdate}
+                />
             </div>
         );
     }
@@ -94,9 +115,18 @@ export default function TaskList() {
                 <h1>Task List</h1>
                 <div className="task-grid">
                     {tasks.map(task => (
-                        <TaskItem key={task.id} task={task} />
+                        <div key={task.id} onClick={() => handleTaskClick(task)}>
+                            <TaskItem task={task} />
+                        </div>
                     ))}
                 </div>
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    title="Edit Task"
+                    task={selectedTask}
+                    onSubmit={handleTaskUpdate}
+                />
             </div>
         );
     }
@@ -126,7 +156,11 @@ export default function TaskList() {
                         onTransitionEnd={handleTransitionEnd}
                     >
                         {extendedTasks.map((task, index) => (
-                            <div key={`${task.id}-${index}`} className="carousel-slide">
+                            <div 
+                                key={`${task.id}-${index}`} 
+                                className="carousel-slide"
+                                onClick={() => handleTaskClick(task)}
+                            >
                                 <TaskItem task={task} />
                             </div>
                         ))}
@@ -142,6 +176,14 @@ export default function TaskList() {
                     →
                 </button>
             </div>
+
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title="Edit Task"
+                task={selectedTask}
+                onSubmit={handleTaskUpdate}
+            />
         </div>
     );
 }
