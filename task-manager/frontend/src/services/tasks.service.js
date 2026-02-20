@@ -24,7 +24,8 @@ export const deleteTask = async (id) => {
   return id;
 };
 
-export const toggleTaskCompletion = async (id) => {
+export const toggleTaskCompletion = async (id, setState) => {
   const response = await api.patch(`${TASKS_ENDPOINT}/${id}/toggle`);
+  setState(prev => prev.map(t => t.id === id ? response.data : t));
   return response.data;
 };

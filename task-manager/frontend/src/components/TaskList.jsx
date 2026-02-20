@@ -1,7 +1,7 @@
 import TaskItem from './TaskItem'
 import Modal from './Modal'
 import '../styles/task-list.css'
-import { getAllTasks, updateTask, createTask } from '../services/tasks.service';
+import { getAllTasks, updateTask, createTask, toggleTaskCompletion } from '../services/tasks.service';
 import { useEffect, useState, useMemo } from 'react';
 import clsx from 'clsx';
 
@@ -99,6 +99,10 @@ export default function TaskList() {
         setIsCreateMode(false);
     };
 
+    const handleToggle = (taskId) => {
+        toggleTaskCompletion(taskId, setTasks);
+    };
+
     if (tasks.length === 0) {
         return (
             <div className="task-list-container">
@@ -130,7 +134,7 @@ export default function TaskList() {
                     </button>
                 </div>
                 <div className="single-task" onClick={() => handleTaskClick(tasks[0])}>
-                    <TaskItem task={tasks[0]} />
+                    <TaskItem task={tasks[0]} onToggle={handleToggle} />
                 </div>
                 <Modal
                     isOpen={isModalOpen}
@@ -154,7 +158,7 @@ export default function TaskList() {
                 <div className="task-grid">
                     {tasks.map(task => (
                         <div key={task.id} onClick={() => handleTaskClick(task)}>
-                            <TaskItem task={task} />
+                            <TaskItem task={task} onToggle={handleToggle} />
                         </div>
                     ))}
                 </div>
@@ -204,7 +208,7 @@ export default function TaskList() {
                                 className="carousel-slide"
                                 onClick={() => handleTaskClick(task)}
                             >
-                                <TaskItem task={task} />
+                                <TaskItem task={task} onToggle={handleToggle} />
                             </div>
                         ))}
                     </div>
