@@ -25,7 +25,7 @@ export default function TaskItem({ task, onToggle, onDelete }) {
                 </button>
             <h2>{task.title}</h2>
             <h3>fescription{task.description}</h3>
-            <h3>{task.priority}</h3>
+            <h3>priority: {task.priority}</h3>
             <div className="task-item-actions">
                 <input 
                     type="checkbox" 
