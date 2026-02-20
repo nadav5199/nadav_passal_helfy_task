@@ -9,3 +9,15 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+.task-item-container.priority-low {
+    background-color: #d4edda;
+}
+
+.task-item-container.priority-medium {
+    background-color: #fff3cd;
+}
+
+.task-item-container.priority-high {
+    background-color: #f8d7da;
+}

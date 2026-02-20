@@ -8,9 +8,9 @@ export default function TaskItem({ task, onToggle }) {
     };
 
     return (
-        <div className="task-item-container">
-            <h3>{task.title}</h3>
-            <h3>{task.description}</h3>
+        <div className={`task-item-container priority-${task.priority?.toLowerCase()}`}>
+            <h2>{task.title}</h2>
+            <h3>fescription{task.description}</h3>
             <h3>{task.priority}</h3>
             <input 
                 type="checkbox" 
