@@ -255,3 +255,5 @@ Toggle the completion status of a task.
 - backend - 90 minutes
 - frontend - 130 minutes
 - ui - 20 minutes
+
+thank you for the oppertunity and your time, Nadav
