@@ -115,22 +115,11 @@ export default function Modal({ isOpen, onClose, title, task, onSubmit }) {
                                 <option value="high">High</option>
                             </select>
                         </div>
-                        <div className="form-group checkbox-group">
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    name="completed"
-                                    checked={formData.completed}
-                                    onChange={handleChange}
-                                />
-                                <span>Completed</span>
-                            </label>
-                        </div>
                         <div className="modal-actions">
                             <button type="button" className="btn btn-secondary" onClick={onClose}>
                                 Cancel
                             </button>
-                            <button type="submit" className="btn btn-primary">
+                            <button type="submit" className="btn btn-primary" >
                                 {task ? 'Update' : 'Create'}
                             </button>
                         </div>

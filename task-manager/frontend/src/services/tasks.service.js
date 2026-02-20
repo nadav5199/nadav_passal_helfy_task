@@ -13,8 +13,9 @@ export const createTask = async (taskData) => {
   return response.data;
 };
 
-export const updateTask = async (id, taskData) => {
+export const updateTask = async (id, taskData, setState) => {
   const response = await api.put(`${TASKS_ENDPOINT}/${id}`, taskData);
+  setState(prev => prev.map(t => t.id === id ? response.data : t));
   return response.data;
 };
 

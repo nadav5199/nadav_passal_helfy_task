@@ -1,7 +1,7 @@
 import TaskItem from './TaskItem'
 import Modal from './Modal'
 import '../styles/task-list.css'
-import { getAllTasks } from '../services/tasks.service';
+import { getAllTasks, updateTask } from '../services/tasks.service';
 import { useEffect, useState, useMemo } from 'react';
 import clsx from 'clsx';
 
@@ -78,9 +78,7 @@ export default function TaskList() {
     };
 
     const handleTaskUpdate = (updatedData) => {
-        setTasks(prev => prev.map(t => 
-            t.id === selectedTask.id ? { ...t, ...updatedData } : t
-        ));
+        updateTask(selectedTask.id, updatedData, setTasks);
     };
 
     if (tasks.length === 0) {
