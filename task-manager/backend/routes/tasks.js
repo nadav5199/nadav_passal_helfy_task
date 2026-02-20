@@ -38,8 +38,17 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-    res.send('Hello World');
+    const { id } = req.params;
+    const task = tasks.find(task => task.id === parseInt(id));
+
+    if (!task) {
+        return res.status(404).json({ error: 'Task not found' });
+    }
+
+    tasks = tasks.filter(task => task.id !== parseInt(id));
+    res.status(204).send();
 });
+
 router.patch('/:id/toggle', (req, res) => {
     res.send('Hello World');
 });
