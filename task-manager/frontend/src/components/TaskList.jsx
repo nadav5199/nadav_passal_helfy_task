@@ -13,6 +13,8 @@ export default function TaskList() {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedTask, setSelectedTask] = useState(null)
     const [isCreateMode, setIsCreateMode] = useState(false)
+    const [filter, setFilter] = useState('all')
+    const [isFilterOpen, setIsFilterOpen] = useState(false)
 
     useEffect(() => {
         getAllTasks(setTasks);
@@ -20,32 +22,42 @@ export default function TaskList() {
 
     const cloneCount = 3; 
 
+    const filteredTasks = useMemo(() => {
+        switch (filter) {
+            case 'completed':
+                return tasks.filter(task => task.completed);
+            case 'pending':
+                return tasks.filter(task => !task.completed);
+            default:
+                return tasks;
+        }
+    }, [tasks, filter]);
 
     const extendedTasks = useMemo(() => {
-        if (tasks.length === 0) return [];
-        if (tasks.length < 3) return tasks;
+        if (filteredTasks.length === 0) return [];
+        if (filteredTasks.length < 3) return filteredTasks;
 
-        const prefix = tasks.slice(-cloneCount);
-        const suffix = tasks.slice(0, cloneCount);
+        const prefix = filteredTasks.slice(-cloneCount);
+        const suffix = filteredTasks.slice(0, cloneCount);
 
-        return [...prefix, ...tasks, ...suffix];
-    }, [tasks]);
+        return [...prefix, ...filteredTasks, ...suffix];
+    }, [filteredTasks]);
 
     const handleNext = () => {
-        if (isTransitioning || tasks.length < 3) return;
+        if (isTransitioning || filteredTasks.length < 3) return;
         setIsTransitioning(true);
         setCurrentIndex(prev => prev + 1);
     };
 
     const handlePrev = () => {
-        if (isTransitioning || tasks.length < 3) return;
+        if (isTransitioning || filteredTasks.length < 3) return;
         setIsTransitioning(true);
         setCurrentIndex(prev => prev - 1);
     };
 
 
     const handleTransitionEnd = () => {
-        const totalRealItems = tasks.length;
+        const totalRealItems = filteredTasks.length;
         if (currentIndex >= totalRealItems + cloneCount) {
             setEnableTransition(false);
             setIsTransitioning(false);
@@ -103,11 +115,61 @@ export default function TaskList() {
         toggleTaskCompletion(taskId, setTasks);
     };
 
-    if (tasks.length === 0) {
+    const handleFilterChange = (newFilter) => {
+        setFilter(newFilter);
+        setIsFilterOpen(false);
+        setCurrentIndex(3);
+    };
+
+    const FilterDropdown = () => (
+        <div className="filter-container">
+            <button 
+                className="filter-btn" 
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                aria-label="Filter tasks"
+            >
+                <span>filters</span>
+            </button>
+            {isFilterOpen && (
+                <div className="filter-dropdown">
+                    <label className="filter-option">
+                        <input 
+                            type="radio" 
+                            name="filter" 
+                            checked={filter === 'all'} 
+                            onChange={() => handleFilterChange('all')}
+                        />
+                        All
+                    </label>
+                    <label className="filter-option">
+                        <input 
+                            type="radio" 
+                            name="filter" 
+                            checked={filter === 'completed'} 
+                            onChange={() => handleFilterChange('completed')}
+                        />
+                        Completed
+                    </label>
+                    <label className="filter-option">
+                        <input 
+                            type="radio" 
+                            name="filter" 
+                            checked={filter === 'pending'} 
+                            onChange={() => handleFilterChange('pending')}
+                        />
+                        Pending
+                    </label>
+                </div>
+            )}
+        </div>
+    );
+
+    if (filteredTasks.length === 0) {
         return (
             <div className="task-list-container">
                 <div className="task-list-header">
                     <h1>Task List</h1>
+                    <FilterDropdown />
                     <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
                         +
                     </button>
@@ -124,17 +186,18 @@ export default function TaskList() {
         );
     }
 
-    if (tasks.length === 1) {
+    if (filteredTasks.length === 1) {
         return (
             <div className="task-list-container">
                 <div className="task-list-header">
                     <h1>Task List</h1>
+                    <FilterDropdown />
                     <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
                         +
                     </button>
                 </div>
-                <div className="single-task" onClick={() => handleTaskClick(tasks[0])}>
-                    <TaskItem task={tasks[0]} onToggle={handleToggle} />
+                <div className="single-task" onClick={() => handleTaskClick(filteredTasks[0])}>
+                    <TaskItem task={filteredTasks[0]} onToggle={handleToggle} />
                 </div>
                 <Modal
                     isOpen={isModalOpen}
@@ -146,17 +209,18 @@ export default function TaskList() {
             </div>
         );
     }
-    if (tasks.length === 2) {
+    if (filteredTasks.length === 2) {
         return (
             <div className="task-list-container">
                 <div className="task-list-header">
                     <h1>Task List</h1>
+                    <FilterDropdown />
                     <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
                         +
                     </button>
                 </div>
                 <div className="task-grid">
-                    {tasks.map(task => (
+                    {filteredTasks.map(task => (
                         <div key={task.id} onClick={() => handleTaskClick(task)}>
                             <TaskItem task={task} onToggle={handleToggle} />
                         </div>
@@ -177,6 +241,7 @@ export default function TaskList() {
         <div className="task-list-container">
             <div className="task-list-header">
                 <h1>Task List</h1>
+                <FilterDropdown />
                 <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
                     +
                 </button>
