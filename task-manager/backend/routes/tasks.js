@@ -50,7 +50,13 @@ router.delete('/:id', (req, res) => {
 });
 
 router.patch('/:id/toggle', (req, res) => {
-    res.send('Hello World');
+    const { id } = req.params;
+    const task = tasks.find(task => task.id === parseInt(id));
+    if (!task) {
+        return res.status(404).json({ error: 'Task not found' });
+    }
+    task.completed = !task.completed;
+    res.json(task);
 });
 
 module.exports = router;
