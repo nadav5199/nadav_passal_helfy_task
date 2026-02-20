@@ -2,7 +2,7 @@ import TaskItem from './TaskItem'
 import Modal from './Modal'
 import FilterDropdown from './FilterDropdown'
 import '../styles/task-list.css'
-import { getAllTasks, updateTask, createTask, toggleTaskCompletion } from '../services/tasks.service';
+import { getAllTasks, updateTask, createTask, toggleTaskCompletion, deleteTask } from '../services/tasks.service';
 import { useEffect, useState, useMemo } from 'react';
 import clsx from 'clsx';
 
@@ -115,6 +115,10 @@ export default function TaskList() {
         toggleTaskCompletion(taskId, setTasks);
     };
 
+    const handleDelete = (taskId) => {
+        deleteTask(taskId, setTasks);
+    };
+
     const handleFilterChange = (newFilter) => {
         setFilter(newFilter);
         setCurrentIndex(3);
@@ -153,7 +157,7 @@ export default function TaskList() {
                     </button>
                 </div>
                 <div className="single-task" onClick={() => handleTaskClick(filteredTasks[0])}>
-                    <TaskItem task={filteredTasks[0]} onToggle={handleToggle} />
+                    <TaskItem task={filteredTasks[0]} onToggle={handleToggle} onDelete={handleDelete} />
                 </div>
                 <Modal
                     isOpen={isModalOpen}
@@ -178,7 +182,7 @@ export default function TaskList() {
                 <div className="task-grid">
                     {filteredTasks.map(task => (
                         <div key={task.id} onClick={() => handleTaskClick(task)}>
-                            <TaskItem task={task} onToggle={handleToggle} />
+                            <TaskItem task={task} onToggle={handleToggle} onDelete={handleDelete} />
                         </div>
                     ))}
                 </div>
@@ -229,7 +233,7 @@ export default function TaskList() {
                                 className="carousel-slide"
                                 onClick={() => handleTaskClick(task)}
                             >
-                                <TaskItem task={task} onToggle={handleToggle} />
+                                <TaskItem task={task} onToggle={handleToggle} onDelete={handleDelete} />
                             </div>
                         ))}
                     </div>

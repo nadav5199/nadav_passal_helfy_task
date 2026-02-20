@@ -19,9 +19,9 @@ export const updateTask = async (id, taskData, setState) => {
   return response.data;
 };
 
-export const deleteTask = async (id) => {
+export const deleteTask = async (id, setState) => {
   await api.delete(`${TASKS_ENDPOINT}/${id}`);
-  return id;
+  setState(prev => prev.filter(t => t.id !== id));
 };
 
 export const toggleTaskCompletion = async (id, setState) => {
