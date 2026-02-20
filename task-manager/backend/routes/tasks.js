@@ -5,4 +5,17 @@ router.get('/', (req, res) => {
     res.send('Hello World');
 });
 
+router.post('/', (req, res) => {
+    res.send('Hello World');
+});
+router.put('/:id', (req, res) => {
+    res.send('Hello World');
+});
+router.delete('/:id', (req, res) => {
+    res.send('Hello World');
+});
+router.patch('/:id/toggle', (req, res) => {
+    res.send('Hello World');
+});
+
 module.exports = router;
