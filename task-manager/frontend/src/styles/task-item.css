@@ -1,0 +1,8 @@
+.task-item-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20vw;
+    height: 30vh;
+    background-color: #f0f0f0;
+}
