@@ -7,8 +7,36 @@
     width: 100%;
 }
 
-.task-list-container h1 {
+.task-list-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     margin-bottom: 2rem;
+}
+
+.task-list-header h1 {
+    margin: 0;
+}
+
+.add-task-btn {
+    background: #0d0e0d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.add-task-btn:hover {
+    background: #3c413c;
+    transform: scale(1.1);
 }
 
 .carousel-wrapper {

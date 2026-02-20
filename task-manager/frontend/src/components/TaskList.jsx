@@ -1,7 +1,7 @@
 import TaskItem from './TaskItem'
 import Modal from './Modal'
 import '../styles/task-list.css'
-import { getAllTasks, updateTask } from '../services/tasks.service';
+import { getAllTasks, updateTask, createTask } from '../services/tasks.service';
 import { useEffect, useState, useMemo } from 'react';
 import clsx from 'clsx';
 
@@ -12,6 +12,7 @@ export default function TaskList() {
     const [enableTransition, setEnableTransition] = useState(true)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedTask, setSelectedTask] = useState(null)
+    const [isCreateMode, setIsCreateMode] = useState(false)
 
     useEffect(() => {
         getAllTasks(setTasks);
@@ -74,18 +75,47 @@ export default function TaskList() {
 
     const handleTaskClick = (task) => {
         setSelectedTask(task);
+        setIsCreateMode(false);
         setIsModalOpen(true);
     };
 
-    const handleTaskUpdate = (updatedData) => {
-        updateTask(selectedTask.id, updatedData, setTasks);
+    const handleAddClick = () => {
+        setSelectedTask(null);
+        setIsCreateMode(true);
+        setIsModalOpen(true);
+    };
+
+    const handleModalSubmit = async (formData) => {
+        if (isCreateMode) {
+            const newTask = await createTask(formData);
+            setTasks(prev => [...prev, newTask]);
+        } else {
+            updateTask(selectedTask.id, formData, setTasks);
+        }
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+        setIsCreateMode(false);
     };
 
     if (tasks.length === 0) {
         return (
             <div className="task-list-container">
-                <h1>Task List</h1>
+                <div className="task-list-header">
+                    <h1>Task List</h1>
+                    <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
+                        +
+                    </button>
+                </div>
                 <p>No tasks available</p>
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={handleModalClose}
+                    title="Create Task"
+                    task={null}
+                    onSubmit={handleModalSubmit}
+                />
             </div>
         );
     }
@@ -93,16 +123,21 @@ export default function TaskList() {
     if (tasks.length === 1) {
         return (
             <div className="task-list-container">
-                <h1>Task List</h1>
+                <div className="task-list-header">
+                    <h1>Task List</h1>
+                    <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
+                        +
+                    </button>
+                </div>
                 <div className="single-task" onClick={() => handleTaskClick(tasks[0])}>
                     <TaskItem task={tasks[0]} />
                 </div>
                 <Modal
                     isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    title="Edit Task"
-                    task={selectedTask}
-                    onSubmit={handleTaskUpdate}
+                    onClose={handleModalClose}
+                    title={isCreateMode ? "Create Task" : "Edit Task"}
+                    task={isCreateMode ? null : selectedTask}
+                    onSubmit={handleModalSubmit}
                 />
             </div>
         );
@@ -110,7 +145,12 @@ export default function TaskList() {
     if (tasks.length === 2) {
         return (
             <div className="task-list-container">
-                <h1>Task List</h1>
+                <div className="task-list-header">
+                    <h1>Task List</h1>
+                    <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
+                        +
+                    </button>
+                </div>
                 <div className="task-grid">
                     {tasks.map(task => (
                         <div key={task.id} onClick={() => handleTaskClick(task)}>
@@ -120,10 +160,10 @@ export default function TaskList() {
                 </div>
                 <Modal
                     isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    title="Edit Task"
-                    task={selectedTask}
-                    onSubmit={handleTaskUpdate}
+                    onClose={handleModalClose}
+                    title={isCreateMode ? "Create Task" : "Edit Task"}
+                    task={isCreateMode ? null : selectedTask}
+                    onSubmit={handleModalSubmit}
                 />
             </div>
         );
@@ -131,7 +171,12 @@ export default function TaskList() {
 
     return (
         <div className="task-list-container">
-            <h1>Task List</h1>
+            <div className="task-list-header">
+                <h1>Task List</h1>
+                <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
+                    +
+                </button>
+            </div>
 
             <div className="carousel-wrapper">
                 <button
@@ -177,10 +222,10 @@ export default function TaskList() {
 
             <Modal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                title="Edit Task"
-                task={selectedTask}
-                onSubmit={handleTaskUpdate}
+                onClose={handleModalClose}
+                title={isCreateMode ? "Create Task" : "Edit Task"}
+                task={isCreateMode ? null : selectedTask}
+                onSubmit={handleModalSubmit}
             />
         </div>
     );
