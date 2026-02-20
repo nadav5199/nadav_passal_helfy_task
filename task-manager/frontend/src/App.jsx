@@ -1,9 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import TaskList from './components/TaskList'
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <TaskList />
   </StrictMode>,
 )
