@@ -1,5 +1,6 @@
 import TaskItem from './TaskItem'
 import Modal from './Modal'
+import FilterDropdown from './FilterDropdown'
 import '../styles/task-list.css'
 import { getAllTasks, updateTask, createTask, toggleTaskCompletion } from '../services/tasks.service';
 import { useEffect, useState, useMemo } from 'react';
@@ -14,7 +15,6 @@ export default function TaskList() {
     const [selectedTask, setSelectedTask] = useState(null)
     const [isCreateMode, setIsCreateMode] = useState(false)
     const [filter, setFilter] = useState('all')
-    const [isFilterOpen, setIsFilterOpen] = useState(false)
 
     useEffect(() => {
         getAllTasks(setTasks);
@@ -117,59 +117,15 @@ export default function TaskList() {
 
     const handleFilterChange = (newFilter) => {
         setFilter(newFilter);
-        setIsFilterOpen(false);
         setCurrentIndex(3);
     };
-
-    const FilterDropdown = () => (
-        <div className="filter-container">
-            <button 
-                className="filter-btn" 
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                aria-label="Filter tasks"
-            >
-                <span>filters</span>
-            </button>
-            {isFilterOpen && (
-                <div className="filter-dropdown">
-                    <label className="filter-option">
-                        <input 
-                            type="radio" 
-                            name="filter" 
-                            checked={filter === 'all'} 
-                            onChange={() => handleFilterChange('all')}
-                        />
-                        All
-                    </label>
-                    <label className="filter-option">
-                        <input 
-                            type="radio" 
-                            name="filter" 
-                            checked={filter === 'completed'} 
-                            onChange={() => handleFilterChange('completed')}
-                        />
-                        Completed
-                    </label>
-                    <label className="filter-option">
-                        <input 
-                            type="radio" 
-                            name="filter" 
-                            checked={filter === 'pending'} 
-                            onChange={() => handleFilterChange('pending')}
-                        />
-                        Pending
-                    </label>
-                </div>
-            )}
-        </div>
-    );
 
     if (filteredTasks.length === 0) {
         return (
             <div className="task-list-container">
                 <div className="task-list-header">
                     <h1>Task List</h1>
-                    <FilterDropdown />
+                    <FilterDropdown filter={filter} onFilterChange={handleFilterChange} />
                     <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
                         +
                     </button>
@@ -191,7 +147,7 @@ export default function TaskList() {
             <div className="task-list-container">
                 <div className="task-list-header">
                     <h1>Task List</h1>
-                    <FilterDropdown />
+                    <FilterDropdown filter={filter} onFilterChange={handleFilterChange} />
                     <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
                         +
                     </button>
@@ -214,7 +170,7 @@ export default function TaskList() {
             <div className="task-list-container">
                 <div className="task-list-header">
                     <h1>Task List</h1>
-                    <FilterDropdown />
+                    <FilterDropdown filter={filter} onFilterChange={handleFilterChange} />
                     <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
                         +
                     </button>
@@ -241,7 +197,7 @@ export default function TaskList() {
         <div className="task-list-container">
             <div className="task-list-header">
                 <h1>Task List</h1>
-                <FilterDropdown />
+                <FilterDropdown filter={filter} onFilterChange={handleFilterChange} />
                 <button className="add-task-btn" onClick={handleAddClick} aria-label="Add new task">
                     +
                 </button>
