@@ -5,13 +5,6 @@ const router = express.Router();
 let tasks = [];
 let nextId = 1;
 
-// consts
-const Priority = {
-    LOW: 'low',
-    MEDIUM: 'medium',
-    HIGH: 'high',
-};
-
 // routes
 router.get('/', (req, res) => {
     res.json(tasks);
