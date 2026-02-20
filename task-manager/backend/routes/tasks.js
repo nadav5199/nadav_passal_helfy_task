@@ -26,8 +26,17 @@ router.post('/', (req, res) => {
 
 
 router.put('/:id', (req, res) => {
-    res.send('Hello World');
+    const { title, description, priority } = req.body;
+    const task = tasks.find(task => task.id === parseInt(req.params.id));
+    if (!task) {
+        return res.status(404).json({ error: 'Task not found' });
+    }
+    task.title = title;
+    task.description = description;
+    task.priority = priority;
+    res.json(task);
 });
+
 router.delete('/:id', (req, res) => {
     res.send('Hello World');
 });
