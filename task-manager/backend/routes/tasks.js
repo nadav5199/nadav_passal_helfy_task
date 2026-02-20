@@ -1,13 +1,30 @@
 const express = require('express');
 const router = express.Router();
 
+// in-memory database
+let tasks = [];
+let nextId = 1;
+
+// consts
+const Priority = {
+    LOW: 'low',
+    MEDIUM: 'medium',
+    HIGH: 'high',
+};
+
+// routes
 router.get('/', (req, res) => {
-    res.send('Hello World');
+    res.json(tasks);
 });
 
 router.post('/', (req, res) => {
-    res.send('Hello World');
+    const { title, description, priority } = req.body;
+    const newTask = { id: nextId++, title,completed: false, description, createdAt: new Date(), priority };
+    tasks.push(newTask);
+    res.status(201).json(newTask);
 });
+
+
 router.put('/:id', (req, res) => {
     res.send('Hello World');
 });
