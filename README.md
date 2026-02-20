@@ -253,7 +253,7 @@ Toggle the completion status of a task.
 
 ### Time spent
 - backend - 90 minutes
-- frontend - 130 minutes
-- ui - 20 minutes
+- frontend - 140 minutes
+- ui - 10 minutes
 
 thank you for the oppertunity and your time, Nadav
