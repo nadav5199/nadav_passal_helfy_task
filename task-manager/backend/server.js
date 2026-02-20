@@ -4,7 +4,7 @@ const app = express();
 const tasksRoutes = require('./routes/tasks');
 
 app.use(cors({
-    origin: 'http://localhost:8080',
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type']
 }));
