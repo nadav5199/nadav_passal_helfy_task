@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { validateTaskBody } = require('../middleware/validateTask');
 
 // in-memory database
 let tasks = [];
@@ -10,7 +11,7 @@ router.get('/', (req, res) => {
     res.json(tasks);
 });
 
-router.post('/', (req, res) => {
+router.post('/', validateTaskBody, (req, res) => {
     const { title, description, priority } = req.body;
     const newTask = { id: nextId++, title, completed: false, description, createdAt: new Date(), priority };
     tasks.push(newTask);
@@ -18,7 +19,7 @@ router.post('/', (req, res) => {
 });
 
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateTaskBody, (req, res) => {
     const { id } = req.params;
     const { title, description, priority } = req.body;
     const task = tasks.find(task => task.id === parseInt(id));
