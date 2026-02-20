@@ -19,15 +19,16 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     const { title, description, priority } = req.body;
-    const newTask = { id: nextId++, title,completed: false, description, createdAt: new Date(), priority };
+    const newTask = { id: nextId++, title, completed: false, description, createdAt: new Date(), priority };
     tasks.push(newTask);
     res.status(201).json(newTask);
 });
 
 
 router.put('/:id', (req, res) => {
+    const { id } = req.params;
     const { title, description, priority } = req.body;
-    const task = tasks.find(task => task.id === parseInt(req.params.id));
+    const task = tasks.find(task => task.id === parseInt(id));
     if (!task) {
         return res.status(404).json({ error: 'Task not found' });
     }
@@ -46,7 +47,7 @@ router.delete('/:id', (req, res) => {
     }
 
     tasks = tasks.filter(task => task.id !== parseInt(id));
-    res.status(204).send();
+    res.status(200).send();
 });
 
 router.patch('/:id/toggle', (req, res) => {
